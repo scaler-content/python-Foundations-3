@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 3 Post-Read · Control Statements</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --stock:#E7E0CC;
+    --stock-face:#FBF8EF;
+    --ink:#2B2620;
+    --ink-soft:#5B5347;
+    --tab-red:#A8382E;
+    --tab-teal:#3E6E62;
+    --tab-mustard:#B8842A;
+    --line:#D8CFB4;
+    --good:#3E6E62;
+    --bad:#A8382E;
+    --shadow: 3px 4px 0 rgba(43,38,32,0.14);
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--stock);
+    background-image: radial-gradient(rgba(43,38,32,0.03) 1px, transparent 1px);
+    background-size: 14px 14px;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    line-height:1.55;
+    padding:0 0 80px;
+  }
+  code, .mono{ font-family:'IBM Plex Mono', monospace; }
+  h1,h2,h3,.tab-label{ font-family:'Special Elite', 'IBM Plex Mono', monospace; font-weight:400; letter-spacing:0.01em; }
+  .wrap{ max-width:720px; margin:0 auto; padding:0 20px; }
+
+  header.masthead{ padding:52px 20px 28px; max-width:720px; margin:0 auto; }
+  header.masthead .kicker{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-soft); margin:0 0 10px; }
+  header.masthead h1{ font-size:2.1rem; margin:0 0 6px; line-height:1.25; }
+  header.masthead p.sub{ color:var(--ink-soft); font-size:1.02rem; max-width:56ch; margin:0; }
+
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 18px; margin:22px 0 0; padding:14px 16px; background:var(--stock-face); border:1px solid var(--line); font-size:0.86rem; color:var(--ink-soft); }
+  .legend span{white-space:nowrap;}
+
+  .scope{ margin:34px auto 46px; max-width:720px; padding:20px 20px 20px 22px; background:var(--stock-face); border-left:5px solid var(--tab-red); box-shadow:var(--shadow); }
+  .scope h2{ font-size:1rem; margin:0 0 8px; color:var(--tab-red); }
+  .scope p{margin:0; color:var(--ink);}
+
+  .card{ position:relative; max-width:720px; margin:0 auto 40px; background:var(--stock-face); border:1px solid var(--line); box-shadow:var(--shadow); }
+  .card-tab{ position:absolute; top:-16px; left:24px; padding:5px 12px; color:#fff; font-size:0.82rem; font-family:'IBM Plex Mono', monospace; box-shadow: 2px 2px 0 rgba(43,38,32,0.18); }
+  .card-body{ padding:34px 26px 26px; }
+  .card h3{ font-size:1.28rem; margin:0 0 14px; }
+  .card p{margin:0 0 14px;}
+  .card p:last-child{margin-bottom:0;}
+
+  .analogy, .takeaway, .note{ padding:14px 16px; margin:16px 0; font-size:0.95rem; }
+  .analogy{ background:#F2ECD8; border:1px dashed var(--tab-mustard); }
+  .analogy .label{font-weight:600; color:var(--tab-mustard); font-size:0.8rem; font-family:'IBM Plex Mono',monospace; margin-bottom:4px; display:block;}
+  .takeaway{ background:#EAF1EE; border-left:4px solid var(--tab-teal); }
+  .takeaway .label{font-weight:600; color:var(--tab-teal); font-size:0.8rem; font-family:'IBM Plex Mono',monospace; margin-bottom:4px; display:block;}
+  .note{ background:#F6E9E7; border-left:4px solid var(--tab-red); }
+  .note .label{font-weight:600; color:var(--tab-red); font-size:0.8rem; font-family:'IBM Plex Mono',monospace; margin-bottom:4px; display:block;}
+
+  pre{ background:#26221D; color:#EDE6D2; padding:14px 16px; overflow-x:auto; font-size:0.88rem; margin:14px 0; line-height:1.5; }
+  pre .out{color:#8FBBA9;}
+  pre .err{color:#D98E82;}
+
+  details.predict{ margin:16px 0; border:1px solid var(--line); background:#fff; }
+  details.predict summary{ cursor:pointer; padding:12px 14px; font-family:'IBM Plex Mono', monospace; font-size:0.88rem; color:var(--tab-teal); list-style:none; display:flex; align-items:center; gap:8px; }
+  details.predict summary::-webkit-details-marker{display:none;}
+  details.predict summary::before{ content:"▸"; display:inline-block; transition:transform 0.15s ease; }
+  details.predict[open] summary::before{ transform:rotate(90deg); }
+  details.predict .reveal{ padding:0 14px 16px; border-top:1px solid var(--line); padding-top:12px; }
+
+  table{ width:100%; border-collapse:collapse; margin:16px 0; font-size:0.92rem; }
+  th, td{ text-align:left; padding:9px 10px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-soft); font-weight:600; border-bottom:2px solid var(--ink); }
+
+  .vote-box{ border:1px solid var(--line); background:#fff; padding:16px; margin:16px 0; }
+  .vote-btns{display:flex; gap:10px; margin:10px 0;}
+  .vote-btns button{ flex:1; font-family:'IBM Plex Mono', monospace; padding:10px; background:var(--stock); border:1px solid var(--ink); cursor:pointer; font-size:0.9rem; }
+  .vote-btns button:hover{background:var(--ink); color:var(--stock-face);}
+  .vote-tally{font-size:0.82rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  .vote-result{display:none; margin-top:12px;}
+  .vote-result.show{display:block;}
+
+  .terms-grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(150px, 1fr)); gap:12px; margin-top:8px; }
+  .flip{ perspective:800px; height:110px; cursor:pointer; }
+  .flip-inner{ position:relative; width:100%; height:100%; transition:transform 0.5s; transform-style:preserve-3d; }
+  .flip.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-face{ position:absolute; width:100%; height:100%; backface-visibility:hidden; border:1px solid var(--ink); display:flex; align-items:center; justify-content:center; text-align:center; padding:10px; font-size:0.85rem; }
+  .flip-front{ background:var(--stock-face); font-family:'IBM Plex Mono', monospace; font-weight:600; }
+  .flip-back{ background:var(--ink); color:var(--stock-face); transform:rotateY(180deg); font-size:0.76rem; line-height:1.4; }
+
+  .qlist{margin:14px 0; padding-left:22px;}
+  .qlist li{margin-bottom:8px;}
+
+  /* lane diagram for order-of-conditions */
+  .lane-wrap{ margin:16px 0; overflow-x:auto; }
+
+  /* flow diamond diagram */
+  .flow{ display:flex; flex-direction:column; align-items:center; gap:6px; margin:18px 0; font-family:'IBM Plex Mono', monospace; font-size:0.82rem; }
+  .flow .diamond{
+    background:var(--tab-mustard); color:#fff; padding:10px 16px; text-align:center;
+    clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+    width:220px; height:80px; display:flex; align-items:center; justify-content:center;
+  }
+  .flow .branches{ display:flex; gap:40px; width:100%; justify-content:center; margin-top:4px;}
+  .flow .branch{ display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .flow .branch .tag{ font-size:0.72rem; color:var(--ink-soft); }
+  .flow .branch .box{ background:var(--tab-teal); color:#fff; padding:8px 14px; text-align:center; }
+  .flow .branch .box.grey{ background:#B7AE8F; }
+
+  /* nested boxes */
+  .nest-outer{
+    border:3px solid var(--tab-red); padding:20px; margin:16px 0; position:relative;
+  }
+  .nest-outer .tag{ position:absolute; top:-12px; left:14px; background:var(--stock-face); padding:0 6px; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--tab-red);}
+  .nest-inner{
+    border:3px solid var(--tab-teal); padding:16px; position:relative; background:#F5F1E5;
+  }
+  .nest-inner .tag{ position:absolute; top:-12px; left:14px; background:#F5F1E5; padding:0 6px; font-family:'IBM Plex Mono',monospace; font-size:0.78rem; color:var(--tab-teal);}
+  .nest-outer .outside-note{ margin-top:14px; font-size:0.82rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; }
+
+  footer.endcap{ max-width:720px; margin:20px auto 0; padding:18px 20px; text-align:center; color:var(--ink-soft); font-size:0.84rem; }
+
+  @media (max-width: 600px){
+    header.masthead h1{font-size:1.6rem;}
+    .card-body{padding:30px 18px 20px;}
+    .flow .branches{gap:16px;}
+  }
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <p class="kicker">DSML · Post-Read · Class 3</p>
+  <h1>Control Statements</h1>
+  <p class="sub">A card-by-card walkthrough to lock in what we covered — commit to a guess at each 🔮 before you tap to reveal, same as we did live.</p>
+  <div class="legend">
+    <span>🔮 predict before revealing</span>
+    <span>💬 debrief</span>
+    <span>🤖 AI moment</span>
+    <span>✅ takeaway</span>
+  </div>
+</header>
+
+<div class="scope">
+  <h2>What this post-read covers</h2>
+  <p><code>if</code>, <code>else</code>, and <code>elif</code>; why indentation is part of Python's syntax, not just style; why the order of conditions matters; Boolean expressions as conditions; nested conditions vs logical operators; and the ternary operator.</p>
+</div>
+
+<div class="wrap">
+
+  <!-- CARD: intro -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-red)">01 · teaching python to decide</div>
+    <div class="card-body">
+      <h3>From straight-line code to branching code</h3>
+      <p>Every program so far has run top to bottom, one line after another. Real programs need to branch: if the user is 18 or older, let them in — otherwise, don't. That's <strong>conditional logic</strong>, and it starts with the fact that comparisons give us Booleans.</p>
+      <details class="predict">
+        <summary>🔮 Based on last class's comparison operators, what does this print?</summary>
+        <div class="reveal">
+<pre>age = 20
+print(age >= 18)
+
+<span class="out">True</span></pre>
+          <p>💬 A condition is just a question whose answer is <code>True</code> or <code>False</code>. Python uses that answer to decide what happens next.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: if + indentation -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-teal)">02 · if &amp; indentation</div>
+    <div class="card-body">
+      <h3>The simplest decision</h3>
+      <pre>age = 20
+
+if age >= 18:
+    print("You are an adult.")
+
+<span class="out">You are an adult.</span></pre>
+      <p><code>if</code> starts a decision, <code>age &gt;= 18</code> is the condition, <code>:</code> marks the start of the block, and the indented line runs only when the condition is <code>True</code>.</p>
+
+      <div class="flow">
+        <div class="diamond">age &gt;= 18 ?</div>
+        <div class="branches">
+          <div class="branch"><span class="tag">True</span><div class="box">print()</div></div>
+          <div class="branch"><span class="tag">False</span><div class="box grey">skip</div></div>
+        </div>
+      </div>
+
+      <details class="predict">
+        <summary>🔮 Same words, only the indentation removed — run fine, run differently, or fail?</summary>
+        <div class="reveal">
+<pre>age = 20
+
+if age >= 18:
+print("You are an adult.")
+
+<span class="err">IndentationError: expected an indented block after 'if' statement on line 3</span></pre>
+          <p>💬 Indentation isn't cosmetic — it's part of Python's syntax. Python uses it to know which lines belong to the <code>if</code>. Four spaces is the normal convention.</p>
+        </div>
+      </details>
+
+      <details class="predict">
+        <summary>🔮 What prints if <code>age = 15</code>, with no <code>else</code> yet?</summary>
+        <div class="reveal">
+<pre>age = 15
+
+if age >= 18:
+    print("You are an adult.")
+
+<span class="out">(nothing is printed)</span></pre>
+          <p>💬 <code>15 >= 18</code> is <code>False</code>, so Python just skips the indented line — there's no output at all, and that's expected, not a bug.</p>
+        </div>
+      </details>
+
+      <div class="takeaway">
+        <span class="label">✅ Takeaway</span>
+        Code belonging to an <code>if</code> must be indented — this is Python enforcing structure, the same way it enforced syntax back in Class 1.
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: else -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-mustard)">03 · else</div>
+    <div class="card-body">
+      <h3>Handling the false case</h3>
+      <details class="predict">
+        <summary>🔮 What prints now, with age = 15 and an else added?</summary>
+        <div class="reveal">
+<pre>age = 15
+
+if age >= 18:
+    print("You are an adult.")
+else:
+    print("You are not an adult.")
+
+<span class="out">You are not an adult.</span></pre>
+        </div>
+      </details>
+      <p><code>if</code> handles the condition being true; <code>else</code> handles everything else.</p>
+      <p>A first useful program — try predicting the output for a score of 75, then for 32, before reading on:</p>
+      <pre>score = int(input("Enter your score: "))
+
+if score >= 40:
+    print("You passed!")
+else:
+    print("You failed.")</pre>
+    </div>
+  </div>
+
+  <!-- CARD: elif + order matters -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-red)">04 · elif &amp; order</div>
+    <div class="card-body">
+      <h3>More than two possibilities</h3>
+      <pre>score = int(input("Enter your score: "))
+
+if score >= 90:
+    print("Grade A")
+elif score >= 80:
+    print("Grade B")
+elif score >= 70:
+    print("Grade C")
+elif score >= 60:
+    print("Grade D")
+else:
+    print("Grade F")</pre>
+      <p>Python checks conditions top to bottom and stops at the first one that's <code>True</code> — it never looks at the rest.</p>
+
+      <details class="predict">
+        <summary>🔮 With score = 85, which grade prints — and which lines does Python never even look at?</summary>
+        <div class="reveal">
+<pre>85 >= 90 → False
+85 >= 80 → True
+
+<span class="out">Grade B</span></pre>
+          <p>💬 Once <code>score &gt;= 80</code> is <code>True</code>, Python prints Grade B and skips every remaining <code>elif</code>/<code>else</code> — it doesn't keep checking just to be thorough.</p>
+        </div>
+      </details>
+
+      <div class="vote-box">
+        <p style="margin:0 0 4px;"><strong>Now the big one. score = 95 — what prints?</strong></p>
+<pre style="margin-top:0;">if score >= 60:
+    print("Grade D")
+elif score >= 90:
+    print("Grade A")</pre>
+        <div class="vote-btns">
+          <button onclick="castVote('A')">Grade A</button>
+          <button onclick="castVote('D')">Grade D</button>
+          <button onclick="castVote('both')">Both</button>
+        </div>
+        <p class="vote-tally" id="voteTally"></p>
+        <div class="vote-result" id="voteResult">
+          <p>💬 The output is <code>Grade D</code>. 95 is obviously greater than 90 — but Python checks <code>score &gt;= 60</code> first, and that's already <code>True</code>, so it stops right there and never reaches the <code>elif</code>. <strong>The order of your conditions matters.</strong></p>
+<pre>if score >= 90:
+    print("Grade A")
+elif score >= 60:
+    print("Grade D")</pre>
+          <p style="margin:0;">Put the more specific, higher-priority condition first.</p>
+        </div>
+      </div>
+
+      <div class="lane-wrap">
+        <svg viewBox="0 0 500 110" width="100%" height="110" xmlns="http://www.w3.org/2000/svg" font-family="IBM Plex Mono, monospace">
+          <line x1="10" y1="55" x2="490" y2="55" stroke="#5B5347" stroke-width="1.5" stroke-dasharray="2 4"/>
+          <text x="10" y="18" font-size="11" fill="#2B2620">score = 95 →</text>
+          <rect x="90" y="35" width="120" height="40" fill="#3E6E62"/>
+          <text x="150" y="59" font-size="11" fill="#fff" text-anchor="middle">score &gt;= 60?</text>
+          <line x1="210" y1="55" x2="250" y2="55" stroke="#A8382E" stroke-width="2" marker-end="url(#arrow)"/>
+          <text x="230" y="42" font-size="10" fill="#A8382E" text-anchor="middle">Grade D — stops here</text>
+          <rect x="330" y="35" width="140" height="40" fill="#B7AE8F"/>
+          <text x="400" y="59" font-size="11" fill="#fff" text-anchor="middle">score &gt;= 90? (never reached)</text>
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+              <path d="M0,0 L6,3 L0,6 Z" fill="#A8382E"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <div class="note">
+        <span class="label">🤖 AI moment</span>
+        If you guessed Grade A, paste this into an AI assistant: "I expected score = 95 to print Grade A here, but it printed Grade D. Walk me through why, without just telling me to reorder the conditions." Then reorder the conditions yourself and re-run with score = 95 to prove it now prints Grade A.
+      </div>
+
+      <div class="takeaway">
+        <span class="label">✅ Takeaway</span>
+        <code>elif</code> chains stop at the first <code>True</code> condition — put more specific, higher-priority conditions before broader ones.
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: boolean expressions as conditions -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-teal)">05 · boolean conditions</div>
+    <div class="card-body">
+      <h3>Conditions built from and / or / not</h3>
+      <details class="predict">
+        <summary>🔮 Work out <code>age >= 18 and has_id</code> step by step before revealing</summary>
+        <div class="reveal">
+<pre>age = 20
+has_id = True
+
+if age >= 18 and has_id:
+    print("Entry allowed.")
+else:
+    print("Entry denied.")
+
+<span class="out">Entry allowed.</span></pre>
+          <p>💬 <code>age &gt;= 18</code> → True, <code>has_id</code> → True, <code>True and True</code> → True — so the if block runs.</p>
+        </div>
+      </details>
+
+      <details class="predict">
+        <summary>🔮 <code>has_ticket = False</code>, <code>is_guest = True</code>, joined with <code>or</code> — what prints?</summary>
+        <div class="reveal">
+<pre>if has_ticket or is_guest:
+    print("You may enter.")
+else:
+    print("You cannot enter.")
+
+<span class="out">You may enter.</span></pre>
+          <p>💬 <code>or</code> only needs one condition to be true.</p>
+        </div>
+      </details>
+
+      <details class="predict">
+        <summary>🔮 <code>is_raining = False</code> — does <code>if not is_raining:</code> print its message?</summary>
+        <div class="reveal">
+<pre>if not is_raining:
+    print("Let's go outside.")
+
+<span class="out">Let's go outside.</span></pre>
+          <p>💬 <code>not False</code> becomes <code>True</code>, so the message displays.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- CARD: nested conditions -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-mustard)">06 · nested conditions</div>
+    <div class="card-body">
+      <h3>A decision inside a decision</h3>
+      <p>Sometimes one decision only makes sense after another. First check age, <em>then</em> — only if that passes — check for an ID.</p>
+      <pre>age = 20
+has_id = True
+
+if age >= 18:
+    if has_id:
+        print("Entry allowed.")
+    else:
+        print("You need an ID.")
+else:
+    print("You are too young.")</pre>
+
+      <div class="nest-outer">
+        <span class="tag">age &gt;= 18 ?</span>
+        <div class="nest-inner">
+          <span class="tag">has_id ?</span>
+          <p style="margin:0; font-size:0.85rem;">True → "Entry allowed."<br>False → "You need an ID."</p>
+        </div>
+        <p class="outside-note">Outside both boxes → "You are too young." (only reached when the outer check is False)</p>
+      </div>
+
+      <p>The inner <code>if</code> is only ever checked when the outer one is true — that's what "nested" means. Compare it to the logical-operator version:</p>
+      <pre>if age >= 18 and has_id:
+    print("Entry allowed.")</pre>
+      <p>When conditions are simple and independent, <code>and</code> is often shorter and easier to read. Nesting earns its keep when the second decision genuinely depends on the first, or each level needs a different action — like distinguishing "too young" from "has no ID" above, which the <code>and</code> version can't do in one line.</p>
+
+      <div class="note">
+        <span class="label">🤖 AI moment (optional stretch)</span>
+        With both versions working, ask an AI assistant: "Here are two ways I wrote the same entry check — one nested, one using <code>and</code>. When would each be the better choice?" Then try adding a distinct "too young" vs "no ID" message to the <code>and</code> version yourself and see whether it can express it as cleanly as the nested version does.
+      </div>
+
+      <p>A second example — predict what happens for a wrong username, and separately for a right username with a wrong password, before reading on:</p>
+      <pre>username = input("Enter username: ")
+password = input("Enter password: ")
+
+if username == "admin":
+    if password == "python123":
+        print("Login successful.")
+    else:
+        print("Incorrect password.")
+else:
+    print("Unknown username.")</pre>
+      <p>Wrong username → the password check is never reached. Right username, wrong password → the <em>inner</em> else runs. That's the whole point of nesting: the second check only exists inside the first check's true path.</p>
+
+      <div class="takeaway">
+        <span class="label">✅ Takeaway</span>
+        Both patterns are correct. Reach for <code>and</code> when conditions are independent; nest when a decision only makes sense after an earlier one, or each branch needs its own action.
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: ternary -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-red)">07 · ternary operator</div>
+    <div class="card-body">
+      <h3>Compressing a simple if-else</h3>
+      <p>This five-line block sets one variable:</p>
+      <pre>age = 20
+
+if age >= 18:
+    status = "Adult"
+else:
+    status = "Minor"</pre>
+
+      <details class="predict">
+        <summary>🔮 Guess how Python might compress this to a single line, then reveal</summary>
+        <div class="reveal">
+<pre>age = 20
+status = "Adult" if age >= 18 else "Minor"
+print(status)
+
+<span class="out">Adult</span></pre>
+          <p>💬 This is called a conditional expression, usually just called the <strong>ternary operator</strong>.</p>
+        </div>
+      </details>
+
+      <p>The pattern reads like a sentence:</p>
+      <pre>value_if_true if condition else value_if_false</pre>
+      <p><code>message = "Pass" if score >= 40 else "Fail"</code> reads as: "Set message to Pass if the score is at least 40, otherwise set it to Fail."</p>
+
+      <div class="note">
+        <span class="label">When not to use it</span>
+        Don't chain ternaries to save lines — <code>"A" if score&gt;=90 else "B" if score&gt;=80 else "C" if score&gt;=70 else "F"</code> is technically valid but much harder to read than a normal <code>if</code>/<code>elif</code>/<code>else</code>. Save the ternary for genuinely simple two-way choices.
+      </div>
+
+      <div class="takeaway">
+        <span class="label">✅ Takeaway</span>
+        The ternary operator isn't new logic — it's just a compact way of writing a simple if-else.
+      </div>
+    </div>
+  </div>
+
+  <!-- CARD: mini project / challenge -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-teal)">practice</div>
+    <div class="card-body">
+      <h3>Mini project: eligibility checker</h3>
+      <p>Ask for age and registration status; the user is eligible only if they're at least 18 <strong>and</strong> registered.</p>
+      <pre>age = int(input("Enter your age: "))
+registered = input("Are you registered? ")
+
+if age >= 18 and registered == "yes":
+    print("You are eligible.")
+else:
+    print("You are not eligible.")</pre>
+
+      <details class="predict">
+        <summary>🔮 Predict the output for three cases, then reveal — and think about why we use <code>and</code>, not <code>or</code></summary>
+        <div class="reveal">
+          <p><code>age=20, registered="yes"</code> → <strong>eligible</strong><br>
+          <code>age=20, registered="no"</code> → <strong>not eligible</strong><br>
+          <code>age=16, registered="yes"</code> → <strong>not eligible</strong></p>
+          <p>💬 <code>or</code> would let an unregistered adult in, or a registered minor in — either alone would satisfy an <code>or</code>. The rule needs <em>both</em> conditions, which is exactly what <code>and</code> enforces.</p>
+        </div>
+      </details>
+
+      <h3 style="margin-top:24px;">Mini challenge: discount calculator</h3>
+      <p>₹5,000+ → 20% discount. ₹2,000+ → 10% discount. Otherwise → no discount.</p>
+      <pre>amount = float(input("Enter purchase amount: "))
+
+if __________:
+    discount = 20
+elif __________:
+    discount = 10
+else:
+    discount = 0
+
+print("Discount:", discount, "%")</pre>
+
+      <details class="predict">
+        <summary>🔮 Which condition has to come first — the 5,000 check or the 2,000 check, and why?</summary>
+        <div class="reveal">
+<pre>amount = float(input("Enter purchase amount: "))
+
+if amount >= 5000:
+    discount = 20
+elif amount >= 2000:
+    discount = 10
+else:
+    discount = 0
+
+print("Discount:", discount, "%")</pre>
+          <p>💬 The 5,000 check has to come first — this is the same order-of-conditions rule from earlier in this card. If the 2,000 check came first, an amount of 6,000 would match it and stop there, before ever reaching the correct 20% tier.</p>
+        </div>
+      </details>
+
+      <div class="note">
+        <span class="label">How to approach these</span>
+        Write your own version before opening either reveal above. If your output doesn't match, check condition order first — it's the most common cause of a "close but wrong" answer in this class.
+      </div>
+
+      <ol class="qlist">
+        <li>What does indentation control in an <code>if</code> block, and what error do you get without it?</li>
+        <li>What's the difference between what <code>else</code> handles and what <code>elif</code> handles?</li>
+        <li>Why does the order of conditions in an <code>elif</code> chain matter?</li>
+        <li>When would you reach for a nested <code>if</code> instead of <code>and</code>?</li>
+        <li>What does the ternary operator compress, and when should you avoid it?</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- QUICK REVISION -->
+  <div class="card">
+    <div class="card-tab" style="background:var(--tab-mustard)">quick revision</div>
+    <div class="card-body">
+      <h3>Key terms — tap to flip</h3>
+      <div class="terms-grid" id="termsGrid"></div>
+    </div>
+  </div>
+
+</div>
+
+<footer class="endcap">
+  Class 3 · Control Statements — post-read
+</footer>
+
+<script>
+  let votes = {A:0, D:0, both:0};
+  function castVote(choice){
+    votes[choice]++;
+    document.getElementById('voteTally').textContent =
+      `Votes — Grade A: ${votes.A}, Grade D: ${votes.D}, Both: ${votes.both}`;
+    document.getElementById('voteResult').classList.add('show');
+  }
+
+  const terms = [
+    {term: 'condition', def: 'A question whose answer is True or False — usually a comparison.'},
+    {term: 'if', def: 'Runs its indented block only when the condition is True.'},
+    {term: 'else', def: 'Runs when the if condition (and every elif above it) is False.'},
+    {term: 'elif', def: 'Checks another condition only if the ones above it were False.'},
+    {term: 'IndentationError', def: 'Python could not find the indented block a statement like if requires.'},
+    {term: 'first match wins', def: 'An elif chain stops at the first True condition and skips the rest.'},
+    {term: 'nested condition', def: 'An if statement inside another if — the inner check only runs if the outer one is True.'},
+    {term: 'ternary operator', def: 'value_if_true if condition else value_if_false — a compact if-else.'},
+  ];
+  const grid = document.getElementById('termsGrid');
+  terms.forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'flip';
+    el.innerHTML = `
+      <div class="flip-inner">
+        <div class="flip-face flip-front">${t.term}</div>
+        <div class="flip-face flip-back">${t.def}</div>
+      </div>`;
+    el.addEventListener('click', () => el.classList.toggle('flipped'));
+    grid.appendChild(el);
+  });
+</script>
+
+</body>
+</html>
